@@ -28,7 +28,7 @@ def main():
 def download():
 
     keyword = input("Keyword: ")
-    number = input("Number of Images: ")
+    number = int(input("Number of Images: "))
 
     print("Searching...")
 
@@ -39,15 +39,18 @@ def download():
     markup = response.text
 
     crawler = BeautifulSoup(markup,'html.parser')
-    results = crawler.find_all(name = 'div',attrs = {'class':'rg_meta'},limit=number)
+    results = crawler.find_all(name = 'img',attrs = {'class':'t0fcAb'},limit=number)
 
     links = []
 
     for i in results:
-        print(i.text)
-        dic = json.loads(i.text)
-        link = dic['ou']
-        links.append(link)
+        
+        img_link = i['src']
+        links.append(img_link)
+
+    if len(links) == 0:
+        print("ERROR, No Images Found")
+        exit(0)
 
     print(f'found {len(links)} images')
     print('downloading...')
